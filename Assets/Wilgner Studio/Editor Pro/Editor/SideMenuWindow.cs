@@ -12,6 +12,8 @@ public class SideMenuWindow : EditorWindow {
     string version = "1.0";  
     bool stylesNotLoaded = true;
 
+    Texture logoWelcome;
+
     // Colors
     Color menuBackgroundColor = new Color32(67, 66, 67, 255);
     Color selectedMenuColor = new Color32(60, 95, 154, 255);
@@ -28,6 +30,9 @@ public class SideMenuWindow : EditorWindow {
     int menuWidth;
     int widthContent;
 
+    // Scroll
+    Vector2 scroll;
+
     [MenuItem("Wilgner's Studio/Side Menu Window")]
 
     // Start Window
@@ -42,6 +47,8 @@ public class SideMenuWindow : EditorWindow {
     private void OnEnable() {
         menuWidth = (int)(position.width * 0.2f);
         widthContent = (int)(position.width * 0.8f);
+
+
     }
 
     private void OnDisable() {
@@ -49,7 +56,7 @@ public class SideMenuWindow : EditorWindow {
     }
 
     private void LoadConfig() {
-        //logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Wilgner Studio/Easy Inventory/Images/Editor/easyinventory_logo.png", typeof(Texture));
+        logoWelcome = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Wilgner Studio/Editor Pro/Images/Editor/ws_logo.png", typeof(Texture));
 
         menuWidth = (int)(position.width * 0.2f); // 20% width of side menu
         widthContent = (int)(position.width * 0.8f); // 80% width of content
@@ -111,7 +118,7 @@ public class SideMenuWindow : EditorWindow {
 
         #region Footer
         GUILayout.FlexibleSpace();
-        HorizontalLine(new Color(33, 33, 33, 255));
+        HorizontalLine(menuBackgroundColor);
         EditorGUILayout.BeginHorizontal(GUILayout.Width(widthContent - 7));
         GUILayout.FlexibleSpace();
         GUILayout.Label(string.Format("<size=12><b>{0}</b></size>", version), justRichStyleText);
@@ -156,20 +163,77 @@ public class SideMenuWindow : EditorWindow {
             case "Welcome":
                 DrawWelcome();
                 break;
+            case "Menu Item 1":
+                DrawMenuItem1();
+                break;
+            case "Menu Item 2":
+                DrawMenuItem2();
+                break;
+            case "Menu Item 3":
+                DrawMenuItem3();
+                break;
         }
     }
 
     void DrawWelcome() {
+        #region LOGO
+        EditorGUILayout.BeginHorizontal();
+        var style = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter };
+        // I recommend using the logo or name of your asset
+        GUILayout.Label(logoWelcome, style, GUILayout.Width(widthContent), GUILayout.Height(position.height * 0.1f));
+        EditorGUILayout.EndHorizontal();
+        #endregion
 
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(string.Format("<size=11><b>{0}</b></size>", "Lorem Ipsum"), publisherStyle);
+        EditorGUILayout.EndHorizontal();
+
+        float buttonHeigth = position.height * 0.09f;
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("BUTTON 1", GUILayout.Width(widthContent - 7), GUILayout.Height(buttonHeigth)))
+            Debug.Log("BUTTON 1");
+
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("BUTTON 2", GUILayout.Width(widthContent / 2 - 6), GUILayout.Height(buttonHeigth)))
+            Debug.Log("BUTTON 2");
+        if (GUILayout.Button("BUTTON 3", GUILayout.Width(widthContent / 2 - 6), GUILayout.Height(buttonHeigth)))
+            Debug.Log("BUTTON 3");
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("BUTTON 4", GUILayout.Width(widthContent / 2 - 6), GUILayout.Height(buttonHeigth)))
+            Debug.Log("BUTTON 4");
+        if (GUILayout.Button("BUTTON 5", GUILayout.Width(widthContent / 2 - 6), GUILayout.Height(buttonHeigth)))
+            Debug.Log("BUTTON 5");
+        EditorGUILayout.EndHorizontal();
+
+        GUIStyle textStyle = new GUIStyle();
+        textStyle.richText = true;
+        textStyle.alignment = TextAnchor.MiddleCenter;
+        textStyle.normal.textColor = Color.white;
+
+        GUILayout.Label(string.Format("<size=12><b>{0}</b></size>", "Lorem Ipsum"), publisherStyle);
+    }
+
+    void DrawMenuItem1() {
+        GUILayout.Label(string.Format("<size=16><b>{0}</b></size>", "Menu Item 1 Content"), justRichStyleText);
+    }
+
+    void DrawMenuItem2() {
+        GUILayout.Label(string.Format("<size=16><b>{0}</b></size>", "Menu Item 2 Content"), justRichStyleText);
+    }
+
+    void DrawMenuItem3() {
+        GUILayout.Label(string.Format("<size=16><b>{0}</b></size>", "Menu Item 3 Content"), justRichStyleText);
     }
 
     Texture2D MakeTex(int width, int height, Color col) {
         var pix = new Color[width * height];
 
         for (int i = 0; i < pix.Length; i++)
-        {
             pix[i] = col;
-        }
 
         var result = new Texture2D(width, height);
         result.SetPixels(pix);
